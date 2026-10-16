@@ -6,6 +6,7 @@ enum Direction {
 
 interface ElevatorState {
     void move(Elevator elevator);
+
     Direction getDirection();
 }
 
@@ -82,12 +83,11 @@ interface ElevatorObserver {
 class StatusDisplay implements ElevatorObserver {
     public void update(Elevator e) {
         System.out.println(
-            "Lift " + e.id +
-            " | Floor: " + e.floor +
-            " | Direction: " + e.state.getDirection() +
-            " | Up queue: " + e.upQueue +
-            " | Down queue: " + e.downQueue
-        );
+                "Lift " + e.id +
+                        " | Floor: " + e.floor +
+                        " | Direction: " + e.state.getDirection() +
+                        " | Up queue: " + e.upQueue +
+                        " | Down queue: " + e.downQueue);
     }
 }
 
@@ -96,11 +96,9 @@ class Elevator {
     int floor;
     Integer target;
 
-    PriorityQueue<Integer> upQueue =
-        new PriorityQueue<>();
+    PriorityQueue<Integer> upQueue = new PriorityQueue<>();
 
-    PriorityQueue<Integer> downQueue =
-        new PriorityQueue<>(Collections.reverseOrder());
+    PriorityQueue<Integer> downQueue = new PriorityQueue<>(Collections.reverseOrder());
 
     ElevatorState state = new IdleState();
     List<ElevatorObserver> observers = new ArrayList<>();
@@ -156,9 +154,9 @@ class Elevator {
 
     boolean isIdle() {
         return state.getDirection() == Direction.IDLE
-            && target == null
-            && upQueue.isEmpty()
-            && downQueue.isEmpty();
+                && target == null
+                && upQueue.isEmpty()
+                && downQueue.isEmpty();
     }
 
     int distanceTo(int requestedFloor) {
@@ -185,10 +183,9 @@ class ElevatorController {
             int score = e.distanceTo(floor);
             Direction current = e.state.getDirection();
 
-            boolean movingTowardRequest =
-                current == direction &&
-                ((direction == Direction.UP && e.floor <= floor) ||
-                 (direction == Direction.DOWN && e.floor >= floor));
+            boolean movingTowardRequest = current == direction &&
+                    ((direction == Direction.UP && e.floor <= floor) ||
+                            (direction == Direction.DOWN && e.floor >= floor));
 
             if (e.isIdle()) {
                 score -= 1000;
@@ -205,9 +202,8 @@ class ElevatorController {
         }
 
         System.out.println(
-            "\nController assigns floor " + floor +
-            " (" + direction + ") to lift " + best.id
-        );
+                "\nController assigns floor " + floor +
+                        " (" + direction + ") to lift " + best.id);
 
         best.addRequest(floor, direction);
     }
@@ -228,7 +224,7 @@ public class ElevatorSystem {
         controller.request(5, Direction.UP);
         controller.request(8, Direction.UP);
         controller.request(2, Direction.DOWN);
-
+s
         for (int i = 0; i < 12; i++) {
             System.out.println("\n--- Time step " + (i + 1) + " ---");
             controller.stepAll();
